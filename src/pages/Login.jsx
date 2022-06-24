@@ -1,25 +1,22 @@
 import { useFormik } from 'formik'
 import * as yup from 'yup'
-import axios from 'axios'
 
-import {Input} from '../components/Input'
+import { useAuthContext } from '../Context/authcontext'
+
+import { Input } from '../components/Input'
+import { Link, useNavigate } from 'react-router-dom'
 
 const validationSchema = yup.object({
     email: yup.string().required('Email obrigatório').email('Email inválido'),
     password: yup.string().required('Senha Obrigátoria')
 })
 
-export function Login({signInUser}) {
+export function Login() {
+    const { handlelogin } = useAuthContext()
 
     const formik = useFormik({
         onSubmit: async values => {
-            const res = await axios.get('http://localhost:9901/login', {
-                auth: {
-                    username: values.email,
-                    password: values.password
-                }
-            })
-            signInUser(res.data)
+            await handlelogin(values.email, values.password)            
         },
         initialValues: {
             email: '',
@@ -34,7 +31,7 @@ export function Login({signInUser}) {
             <h1 className="text-3xl">Acesse sua conta</h1>
 
             <form className="space-y-3" onSubmit={formik.handleSubmit}>
-
+                
                 <div className="space-y-2">
                     <Input
                         type="text"
@@ -71,7 +68,7 @@ export function Login({signInUser}) {
 
             </form>
             <span className="text-sm text-silver">
-                Não tem conta? <a className="text-birdBlue" href="/signup">Increva-se</a>
+                Não tem conta? <Link className="text-birdBlue" to="/signup">Increva-se</Link>
             </span>
         </div>
     )

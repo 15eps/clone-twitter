@@ -1,18 +1,14 @@
-import { useState } from 'react'
-import {Home} from './pages/Home'
-import { Login } from './pages/Login'
-import { SignUp } from './pages/Signup'
+import { BrowserRouter } from 'react-router-dom'
+import { AuthProvider } from './Context/authcontext'
+import CustomRoutes from './routes'
 
-export const App = () =>{
-  const [user, setUser] = useState()
-
-if(user){
-  return(
-    <Home />
+export const App = () => {
+  
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <CustomRoutes />
+      </AuthProvider>
+    </BrowserRouter>
   )
-}
-
-  return window.location.pathname === "/signup"
-      ? <SignUp signInUser={setUser} />
-      : <Login signInUser={setUser} />
 }

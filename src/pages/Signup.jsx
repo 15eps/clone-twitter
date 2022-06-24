@@ -1,28 +1,33 @@
 import { useFormik } from 'formik'
 import * as yup from 'yup'
-import axios from 'axios'
+import api from '../services/api'
+import {useAuthContext } from '../Context/authcontext'
+
 
 import { Input } from '../components/Input'
+import { Link, useNavigate } from 'react-router-dom'
 
 const validationSchema = yup.object({
     email: yup.string().required('Email obrigatório').email('Email inválido'),
-    username: yup.string().required('Nome de usuário obrigátorio'),
+    username: yup.string().required('Nome de usuário obrigátorio').matches(/[A-Za-z0-9\-\_\.]+/, "Somente letras, .,_ e números são permitidas"),
     name: yup.string().required('Nome obrigatório'),
     password: yup.string().required('Senha Obrigátoria')
 
 })
 
-export function SignUp({ signInUser }) {
+export function SignUp() {
+    const {afterSingup} = useAuthContext()
 
     const formik = useFormik({
         onSubmit: async values => {
-            const res = await axios.post('http://localhost:9901/signup', {
+            const res = await api.post('/signup', {
                 email: values.email,
                 username: values.username,
                 name: values.name,
                 password: values.password
             })
-            signInUser(res.data)
+            
+            afterSingup(res.data)
         },
         initialValues: {
             email: '',
@@ -112,7 +117,7 @@ export function SignUp({ signInUser }) {
 
                 </form>
                 <span className="text-sm text-silver text-center">
-                    Já tem conta? <a className="text-birdBlue" href="/login">Logue-se</a>
+                    Já tem conta? <Link className="text-birdBlue" to="/login">Logue-se</Link>
                 </span>
             </div>
            </div>
