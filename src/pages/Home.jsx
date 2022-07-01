@@ -9,7 +9,6 @@ export function Home() {
   const [data, setData] = useState(null)
 
   async function getTweets() {
-
     const res = await api.get('/tweets')
     setData(res.data)
   }
@@ -26,7 +25,7 @@ export function Home() {
     <> 
       <TweetForm onSuccess={getTweets} />
       <div>        
-        {data && data.map(tweet => (
+        {data?.map(tweet => (
           <Tweet 
           key={tweet.id} 
           data={tweet}

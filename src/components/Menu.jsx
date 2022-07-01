@@ -4,12 +4,12 @@ import Logo from  '../logo.svg'
 
 const links = [
     { link: '/', icon: <HomeIcon className="w-6"/>, name: 'Home' },
-    { link: '/profile', icon: <UserCircleIcon className="w-6"/>, name: 'Profile' },
-    { link: '/logout', icon: <LogoutIcon className="w-6"/>, name: 'Logout' },
+    { link: '/profile', icon: <UserCircleIcon className="w-6"/>, name: 'Profile' }
 ]
 
 
-export function Menu({avatar, username}) {
+export function Menu({avatar, username,logout}) {
+
     return (
         <div className="md:w-[200px] flex flex-col items-center p-4 border-r border-silver">
             <nav className="h-full flex flex-col justify-around items-center">
@@ -25,10 +25,15 @@ export function Menu({avatar, username}) {
                         </Link>
                     )
                     )}
+                    <a onClick={logout} className="hover:opacity-100 opacity-60 flex p-4 space-x-3">
+                    <LogoutIcon className="w-6"/>
+                            <span className="d-none md:inline">Logout</span>
+                    </a>
+                   
                 </div>
-                <div>
+                <div className="flex flex-col justify-center">
                     <Link to={`/${username}`}>
-                    <img alt={username} className="w-12 h-12 rounded-full" src={avatar}/>                    
+                    <img alt={username} className="w-12 h-12 rounded-full" src={avatar}/>                  
                     </Link>
                 </div>
             </nav>

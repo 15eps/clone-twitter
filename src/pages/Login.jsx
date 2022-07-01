@@ -7,7 +7,7 @@ import { Input } from '../components/Input'
 import { Link, useNavigate } from 'react-router-dom'
 
 const validationSchema = yup.object({
-    email: yup.string().required('Email obrigatório').email('Email inválido'),
+    email: yup.string().required('Email/Nome de usuáriuo obrigatório'),
     password: yup.string().required('Senha Obrigátoria')
 })
 

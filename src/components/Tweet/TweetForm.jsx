@@ -1,8 +1,12 @@
 import { useFormik } from 'formik'
 import { useAuthContext } from '../../Context/authcontext';
 import api from '../../services/api'
-
+import * as yup from 'yup'
 const MAX_TWEET_CHAR = 250;
+
+const validationSchema = yup.object({
+  text: yup.string().required('')
+})
 
 export function TweetForm({ onSuccess }) {
   const {user:{avatar}} = useAuthContext()
@@ -17,6 +21,8 @@ export function TweetForm({ onSuccess }) {
       form.setFieldValue('text', '')
       onSuccess()
     },
+    validationSchema,
+    validateOnMount:true,
     initialValues: {
       text: ''
     }
@@ -73,6 +79,8 @@ export function ReplyForm({postId,onSuccess}){
       form.setFieldValue('text', '')     
       onSuccess()
     },
+    validationSchema,
+    validateOnMount:true,
     initialValues:{
       text: ''
     }
@@ -98,7 +106,7 @@ export function ReplyForm({postId,onSuccess}){
         <button
          type="submit"
           className="bg-birdBlue px-5 py-2 rounded-full disabled:opacity-50"
-           disabled={formik.isSubmiting}>Enviar</button>
+           disabled={formik.isSubmitting || !formik.isValid}>Enviar</button>
         </div>
       </form>
       </div>

@@ -26,7 +26,7 @@ const ReplyContent = ({ created_at, text, user, postId, countLike, type, reply,o
         <div>
           <Link to={`/${username}`}><img className="w-[48px!important] h-[48px] object-cover rounded-full" src={avatar} /></Link> 
         </div>
-        {reply > 0 && (<div className="w-[2px] h-full bg-silver m-auto mt-1" />)}
+        {reply > 0  || reply ? (<div className="w-[1px] h-full bg-silver m-auto mb-1" />) : ''}
       </div>
 
       <div className="space-y-1 flex-1">
@@ -50,7 +50,7 @@ const ReplyContent = ({ created_at, text, user, postId, countLike, type, reply,o
 
         <div className="flex items-center space-x-1 text-silver">
           <Like postId={postId} type={type && (type)} like={countLike} />
-          {reply > 0 && (
+          {reply > 0 && type != 'reply' && (
             <>
               <ChatIcon className="ml-auto w-5 cursor-pointer stroke-2 stroke-silver" />
               <span className="text-sm text-silver">{reply}</span>
@@ -95,20 +95,21 @@ export function Tweet({ data, avatar, onSuccess }) {
             onSuccess={onSuccess}
           >
             {TweetReply.length > 1 &&
-              (<span className="text-bold text-sm" onClick={() => setReply((prevState) => !prevState)} >Mostrar Mais</span>)
+              (<span className="font-bold text-xs" onClick={() => setReply((prevState) => !prevState)} >MOSTRAR MAIS</span>)
 
             }
           </ReplyContent>
         ))
         : (
-          TweetReply.map((item) => (
+          TweetReply.map((item,index) => (
             <ReplyContent
               key={item.id}
               postId={item.id}
               countLike={_count.TweetLike}
-              user={user}
+              user={item.user}
               created_at={item.created_at}
               text={item.text}
+              reply={TweetReply.length > index}
               type="reply"
               onSuccess={onSuccess}
             />

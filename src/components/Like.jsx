@@ -40,10 +40,8 @@ export function Like({ postId, type,like }) {
         <div className="flex space-x-1">
             {liked ?
                 <Liked className="w-6 cursor-pointer stroke-1 text-red-500" onClick={fetchLike} />
-                : <HeartIcon className="w-6 cursor-pointer stroke-1 stroke-silver" onClick={fetchLike} />}
-            <span>{like > 0 && (
-                like
-            )}</span>
+                :<HeartIcon className="w-6 cursor-pointer stroke-1 stroke-silver" onClick={fetchLike} />}
+            {like > 0 && (<span>{like}</span>)}
         </div>
     )
 

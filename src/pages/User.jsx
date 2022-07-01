@@ -25,27 +25,26 @@ export function User() {
     return (
 
         <div>
-            <div className="flex flex-col justify-end h-[150px] md:h-[250px] border-b border-silver space-x-4 p-4 bg-gradient-to-t from-birdBlue">
-                <div className="flex items-center space-x-4">
-                    <div>
-                        <img className="w-13 h-13 rounded-full object-cover md:w-20 md:h-20" src={userInfo.avatar} />
-                    </div>
-                    <div className="flex space-x-4 space-y-1">
-                        <div className="flex flex-col space-y-1">
-                            <h2 className="font-bold text-md md:text-lg">{userInfo.name}</h2>
-                            <span className='text-white text-sm md:text-md'>@{userInfo.username}</span>
-                        </div>
-                    </div>
-                        <span className="self-end text-white text-sm" style={{marginLeft:'auto'}}>{userInfo.tweetsTotal} tweets</span>
+            <div className="flex flex-col items-center space-x-4 p-4 bg-birdBlue">
+
+                <div>
+                    <img className="w-20 h-20 rounded-full object-cover md:w-24 md:h-24" src={userInfo.avatar} />
                 </div>
+                <div className="flex flex-col items-center space-y-1">
+                        <h2 className="font-bold text-md md:text-lg">{userInfo.name}</h2>
+                        <span className='text-white text-xs md:text-md'>@{userInfo.username}</span>                   
+                </div>
+
             </div>
 
-            <div>
+            
+                {userInfo.tweetsTotal <= 0 && ("Nenhuma publicação feita ainda")}
+                
+                <>
                 {userInfo.tweets.map(item => (
                     <Tweet key={item.id} data={item} onSuccess={getUserInfo(userName)} />
-                ))
-                }
-            </div>
+                ))}
+                </>
         </div>
     )
 }

@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import api from '../services/api'
 
 export default function useAuth(){
+    const navigate = useNavigate()
+
     const [user, setUser] = useState(()=>{
         const data = JSON.parse(localStorage.getItem('user'))       
         
@@ -14,7 +16,6 @@ export default function useAuth(){
         return null
     })
 
-    const navigate = useNavigate()
     async function handlelogin(email, password){
         try{
             const {data} = await api.get('/login',{

@@ -1,13 +1,14 @@
+import { useEffect, useState } from "react";
 import Resizer from "react-image-file-resizer";
 import { useFormik } from "formik";
 import api from '../services/api'
 import * as yup from 'yup'
 
-import { useAuthContext } from "../Context/authcontext";
+import { useAuthContext } from '../Context/authcontext'
 import { Input } from "../components/Input";
 
-const resizeFile = (file) =>{
-    const newImage =  new Promise((resolve) => {
+const resizeFile = (file) => {
+    const newImage = new Promise((resolve) => {
         Resizer.imageFileResizer(
             file,
             150,
@@ -18,10 +19,12 @@ const resizeFile = (file) =>{
             (uri) => {
                 resolve(uri);
             },
-            "base64"
+            "base64",
+            150,
+            150
         );
     })
-return newImage
+    return newImage
 };
 
 const validationSchema = yup.object({
@@ -30,32 +33,32 @@ const validationSchema = yup.object({
 })
 
 export function Profile() {
-    const { user } = useAuthContext()
+    const {user,updateData} = useAuthContext()
 
     const formik = useFormik({
-        onSubmit: async (values) => {         
-       const res = await api.patch('/profile', {            
-                name: values.name,
-                username: values.username.toLowerCase(),
-                avatar: values.avatar
-            
-        })  
-        localStorage.setItem('user',JSON.stringify(res.data)) 
+        onSubmit:  async (values) => {                
+              const res =  await api.patch('/profile', {            
+                         name: values.name,
+                         username: values.username.toLowerCase(),
+                         avatar: values.avatar
+                     
+                 })  
+
+           updateData(res.data)
         },
         initialValues: {
             username: user.username,
             name: user.name,
-            avatar: user.avatar || null
+            avatar: user.avatar
         },
         validationSchema,
         validateOnMount: true
     })
-async function handleImage(event){
-    const image = await resizeFile(event.currentTarget.files[0])
-    formik.setFieldValue('avatar',  image)
-    console.log(image)
-    return;
-}
+
+    const handleImage = async (event) => {
+        const image = await resizeFile(event.currentTarget.files[0])
+        return formik.setFieldValue('avatar', image)
+    }
     return (
         <div className="h-full flex flex-col">
             <div className="space-y-1 p-4 border-b border-silver">
@@ -98,10 +101,10 @@ async function handleImage(event){
                     />
                 </div>
                 <div className="flex">
-                    <button 
-                    className="flex-1 rounded-full p-4 bg-birdBlue disabled:opacity-60"
-                    type="submit"
-                    disabled={!formik.isValid || formik.isSubmitting}
+                    <button
+                        className="flex-1 rounded-full p-4 bg-birdBlue disabled:opacity-60"
+                        type="submit"
+                        disabled={!formik.isValid || formik.isSubmitting}
                     >{formik.isSubmitting ? 'Salvando' : 'Salvar'}</button>
                 </div>
             </form>
