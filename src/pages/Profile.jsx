@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Resizer from "react-image-file-resizer";
 import { useFormik } from "formik";
 import api from '../services/api'
 import * as yup from 'yup'
@@ -7,30 +6,21 @@ import * as yup from 'yup'
 import { useAuthContext } from '../Context/authcontext'
 import { Input } from "../components/Input";
 
-const resizeFile = (file) => {
-    const newImage = new Promise((resolve) => {
-        Resizer.imageFileResizer(
-            file,
-            150,
-            150,
-            "JPEG",
-            100,
-            0,
-            (uri) => {
-                resolve(uri);
-            },
-            "base64",
-            150,
-            150
-        );
-    })
-    return newImage
-};
 
 const validationSchema = yup.object({
     name: yup.string().required('Nome de usuário obrigatório'),
     username: yup.string().required('Nome de usuário é obrigatório').matches(/[A-Za-z0-9\-\_\.]+/, "NOME DE USUÁRIO INVALIDO")
 })
+
+const convertBase64 = (file) =>{
+    return new Promise((resolve, reject)=>{
+        const fileReader =  new FileReader()
+
+        fileReader.readAsDataURL(file);
+        fileReader.onload = ()=>resolve(fileReader.result)
+        fileReader.onerror = (error)=>reject(error)
+    })
+}
 
 export function Profile() {
     const {user,updateData} = useAuthContext()
@@ -56,7 +46,7 @@ export function Profile() {
     })
 
     const handleImage = async (event) => {
-        const image = await resizeFile(event.currentTarget.files[0])
+        const image = await convertBase64(event.currentTarget.files[0])
         return formik.setFieldValue('avatar', image)
     }
     return (
