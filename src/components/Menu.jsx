@@ -33,7 +33,7 @@ export function Menu({avatar, username,logout}) {
                 </div>
                 <div className="flex flex-col justify-center">
                     <Link to={`/${username}`}>
-                    <img alt={username} className="w-12 h-12 rounded-full" src={avatar}/>                  
+                    <img alt={username} className="w-12 h-12 rounded-full object-cover" src={avatar}/>                  
                     </Link>
                 </div>
             </nav>
