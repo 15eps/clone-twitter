@@ -29,8 +29,6 @@ export function SignUp() {
             })
 
             updateUser(res.data)
-            navigate('/')
-
         },
         initialValues: {
             email: '',
